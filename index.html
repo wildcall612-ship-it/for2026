@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>초등학교 행동특성 및 종합의견 작성 도우미</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    .badge-btn.active {
+      background-color: #2563eb;
+      color: #ffffff;
+      border-color: #2563eb;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-indigo-600 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-sm">
+          <i class="fa-solid fa-graduation-cap text-2xl text-yellow-300"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight">행동특성 및 종합의견 생성 도우미</h1>
+          <p class="text-xs text-indigo-200">초등학교 나이스(NEIS) 맞춤형 AI 작성 도구</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button id="openSheetBtn" class="bg-emerald-500 hover:bg-emerald-600 text-white px-3.5 py-2 rounded-lg text-sm font-medium transition flex items-center shadow-sm">
+          <i class="fa-solid fa-file-excel mr-2"></i>구글 시트로 바로가기
+        </button>
+        <button id="openSettingsBtn" class="bg-indigo-700 hover:bg-indigo-800 text-white p-2.5 rounded-lg text-sm font-medium transition" title="설정">
+          <i class="fa-solid fa-gear text-lg"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- Input Form Section (Left 7 Cols) -->
+    <section class="lg:col-span-7 space-y-5">
+      
+      <!-- Student Info & Tag Presets -->
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
+        <div class="flex items-center justify-between border-b pb-3 border-slate-100">
+          <h2 class="text-base font-bold text-slate-800 flex items-center">
+            <i class="fa-solid fa-user-pen text-indigo-500 mr-2"></i> 학생 정보 및 관찰 입력
+          </h2>
+          <span class="text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-full font-medium">1단계: 기본 정보</span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">학년/반</label>
+            <input type="text" id="gradeClass" placeholder="예: 3학년 2반" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">번호</label>
+            <input type="number" id="studentNum" placeholder="예: 15" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">학생 이름 <span class="text-rose-500">*</span></label>
+            <input type="text" id="studentName" placeholder="예: 김민준" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+          </div>
+        </div>
+
+        <!-- Quick Tags for Academic & Emotion -->
+        <div class="space-y-3 pt-2">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5 flex items-center">
+              <i class="fa-solid fa-book-open text-blue-500 mr-1.5"></i> 학습 태도 및 능력 태그 선택
+            </label>
+            <div class="flex flex-wrap gap-1.5" id="academicTags">
+              <button type="button" data-tag="자기주도적 학습태도" class="badge-btn px-2.5 py-1 text-xs rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium transition">자기주도적</button>
+              <button type="button" data-tag="적극적인 수업 참여 및 발표" class="badge-btn px-2.5 py-1 text-xs rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium transition">적극적 발표</button>
+              <button type="button" data-tag="창의적인 문제해결력" class="badge-btn px-2.5 py-1 text-xs rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium transition">창의적 사고</button>
+              <button type="button" data-tag="끈기있는 과제 수행" class="badge-btn px-2.5 py-1 text-xs rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium transition">과제 책임감</button>
+              <button type="button" data-tag="탐구열 및 경청 태도" class="badge-btn px-2.5 py-1 text-xs rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium transition">경청/탐구</button>
+              <button type="button" data-tag="경청과 수용 태도 우수" class="badge-btn px-2.5 py-1 text-xs rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium transition">경청 능력</button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5 flex items-center">
+              <i class="fa-solid fa-heart text-rose-500 mr-1.5"></i> 정서, 인성 및 인상 깊은 특성 태그
+            </label>
+            <div class="flex flex-wrap gap-1.5" id="emotionalTags">
+              <button type="button" data-tag="배려심과 공감능력 뛰어남" class="badge-btn px-2.5 py-1 text-xs rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium transition">배려/공감</button>
+              <button type="button" data-tag="원만한 교우관계 및 협동심" class="badge-btn px-2.5 py-1 text-xs rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium transition">교우관계 우수</button>
+              <button type="button" data-tag="학급 학급규칙 준수 및 정직함" class="badge-btn px-2.5 py-1 text-xs rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium transition">규칙준수</button>
+              <button type="button" data-tag="솔선수범하는 봉사정신" class="badge-btn px-2.5 py-1 text-xs rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium transition">솔선수범</button>
+              <button type="button" data-tag="긍정적이고 밝은 성품" class="badge-btn px-2.5 py-1 text-xs rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium transition">밝은 성품</button>
+              <button type="button" data-tag="감정 조절 능력 및 회복탄력성" class="badge-btn px-2.5 py-1 text-xs rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium transition">감정조절</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Raw Observation Notes & Impressive Scenes Textarea -->
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-3">
+        <div class="flex items-center justify-between border-b pb-3 border-slate-100">
+          <label for="observationNote" class="text-base font-bold text-slate-800 flex items-center">
+            <i class="fa-solid fa-note-sticky text-amber-500 mr-2"></i> 관찰 메모 및 인상 깊은 장면 <span class="text-rose-500 ml-1">*</span>
+          </label>
+          <span class="text-xs bg-amber-50 text-amber-700 px-2.5 py-1 rounded-full font-medium">2단계: 구체적 메모</span>
+        </div>
+        
+        <p class="text-xs text-slate-500">
+          * 평소 관찰한 학생의 특징, 수업 시간 모습, 또래 관계, 또는 기억에 남는 에피소드를 자유롭게 적어주세요.
+        </p>
+        
+        <textarea id="observationNote" rows="6" placeholder="예: 모둠 활동 시 어려운 친구를 먼저 도와주는 모습이 자주 관찰됨. 과학 실험 시간에 원인을 파악하기 위해 다각도로 질문하며 탐구욕을 보임. 청소 시간에도 잔소리 없이 자기 구역을 책임감 있게 정돈함." class="w-full p-3.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none leading-relaxed resize-y"></textarea>
+
+        <div class="flex justify-between items-center pt-2">
+          <button id="clearInputBtn" class="text-xs text-slate-400 hover:text-slate-600 flex items-center transition">
+            <i class="fa-solid fa-rotate-left mr-1"></i> 입력 내용 초기화
+          </button>
+          
+          <button id="generateBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl transition shadow-md hover:shadow-lg flex items-center">
+            <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> 행동특성 문장 생성하기
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Output Section (Right 5 Cols) -->
+    <section class="lg:col-span-5 space-y-5">
+
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4 flex flex-col h-full">
+        
+        <!-- Header & Tabs -->
+        <div class="flex items-center justify-between border-b pb-3 border-slate-100">
+          <h2 class="text-base font-bold text-slate-800 flex items-center">
+            <i class="fa-solid fa-file-signature text-emerald-500 mr-2"></i> AI 생성 결과 및 수정
+          </h2>
+          <span id="charCounter" class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 text-slate-600">0자 / 바이트(추정)</span>
+        </div>
+
+        <!-- Breakdown Views -->
+        <div class="space-y-3 flex-1 flex flex-col">
+          
+          <div>
+            <label class="block text-xs font-semibold text-blue-700 mb-1 flex items-center">
+              <i class="fa-solid fa-microscope mr-1.5"></i> [학습 및 수업 태도 영역]
+            </label>
+            <textarea id="academicOutput" rows="3" readonly placeholder="AI 생성 버튼을 누르면 학습 영역 요약 문장이 출력됩니다." class="w-full p-3 text-xs bg-slate-50 border border-slate-200 rounded-lg outline-none text-slate-700 resize-none leading-relaxed"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-rose-700 mb-1 flex items-center">
+              <i class="fa-solid fa-hands-holding-child mr-1.5"></i> [정서 및 인성, 관계 영역]
+            </label>
+            <textarea id="emotionalOutput" rows="3" readonly placeholder="AI 생성 버튼을 누르면 정서/인성 영역 요약 문장이 출력됩니다." class="w-full p-3 text-xs bg-slate-50 border border-slate-200 rounded-lg outline-none text-slate-700 resize-none leading-relaxed"></textarea>
+          </div>
+
+          <div class="flex-1 flex flex-col">
+            <label class="block text-xs font-bold text-indigo-900 mb-1 flex items-center">
+              <i class="fa-solid fa-pen-to-square text-indigo-600 mr-1.5"></i> [나이스 입력용 최종 종합 문장 (수정 가능)]
+            </label>
+            <textarea id="finalOutput" rows="8" placeholder="최종 생성된 문장이 이곳에 합쳐져 나타납니다. 직접 수정/편집할 수 있습니다." class="w-full flex-1 p-3.5 text-sm border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none leading-relaxed text-slate-800 font-medium resize-y"></textarea>
+          </div>
+
+        </div>
+
+        <!-- Actions -->
+        <div class="pt-2 space-y-2">
+          <div class="grid grid-cols-2 gap-2">
+            <button id="copyBtn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 px-3 rounded-xl transition text-sm flex items-center justify-center border border-slate-200">
+              <i class="fa-regular fa-copy mr-1.5"></i> 클립보드 복사
+            </button>
+            <button id="saveToSheetBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-3 rounded-xl transition text-sm flex items-center justify-center shadow-md">
+              <i class="fa-solid fa-cloud-arrow-up mr-1.5"></i> 구글 시트 저장
+            </button>
+          </div>
+          <button id="guideBtn" class="w-full text-center text-xs text-slate-500 hover:text-indigo-600 underline pt-1 transition">
+            💡 구글 시트 연동 설정방법 (Google Apps Script 코드 확인)
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Loading Overlay Modal -->
+  <div id="loadingModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-2xl shadow-xl flex flex-col items-center space-y-4 max-w-xs w-full text-center">
+      <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+      <div>
+        <h3 class="font-bold text-slate-800 text-base">Gemini AI 문장 작성 중</h3>
+        <p class="text-xs text-slate-500 mt-1">학습 능력 및 정서 영역을 분석하고 나이스 어조에 맞게 다듬는 중입니다...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settingsModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="bg-slate-800 text-white p-4 flex justify-between items-center">
+        <h3 class="font-bold text-base flex items-center">
+          <i class="fa-solid fa-sliders mr-2"></i> 시스템 설정 (API & 구글 시트)
+        </h3>
+        <button id="closeSettingsBtn" class="text-slate-400 hover:text-white transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      
+      <div class="p-5 space-y-4 overflow-y-auto">
+        <!-- API Key -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">
+            Gemini API Key (선택 입력)
+          </label>
+          <input type="password" id="apiKeyInput" placeholder="Gemini API Key 입력 (미입력 시 기본 키 활용)" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+          <p class="text-[11px] text-slate-500 mt-1">
+            * 입력하지 않을 경우 시스템 자동 키를 사용합니다.
+          </p>
+        </div>
+
+        <!-- Google Apps Script URL -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">
+            Google Apps Script 웹앱 URL (구글 시트 저장용)
+          </label>
+          <input type="url" id="gasUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+          <p class="text-[11px] text-slate-500 mt-1">
+            * 배포한 구글 앱스 스크립트 웹앱 URL을 입력하세요.
+          </p>
+        </div>
+
+        <!-- Direct Spreadsheet Link -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">
+            구글 스프레드시트 바로가기 URL
+          </label>
+          <input type="url" id="sheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/..." class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+          <p class="text-[11px] text-slate-500 mt-1">
+            * 우측 상단 [구글 시트로 바로가기] 버튼 누를 때 열릴 시트 URL입니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-slate-50 p-4 border-t border-slate-100 flex justify-end space-x-2">
+        <button id="saveSettingsBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg text-xs transition">
+          설정 저장하기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAS Guide Modal -->
+  <div id="gasGuideModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="bg-emerald-700 text-white p-4 flex justify-between items-center">
+        <h3 class="font-bold text-base flex items-center">
+          <i class="fa-solid fa-code mr-2"></i> 구글 연동 설치 안내 (Apps Script)
+        </h3>
+        <button id="closeGuideBtn" class="text-emerald-200 hover:text-white transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-4 overflow-y-auto text-xs text-slate-700 leading-relaxed">
+        <ol class="list-decimal list-inside space-y-2 font-medium text-slate-800">
+          <li>사용할 구글 스프레드시트를 생성하거나 엽니다.</li>
+          <li>상단 메뉴에서 <span class="text-emerald-600 font-bold">[확장 프로그램] ➔ [Apps Script]</span>를 클릭합니다.</li>
+          <li>기존 코드(Code.gs)를 지우고 아래 아래 소스코드를 전체 복사하여 붙여넣습니다.</li>
+          <li>우측 상단 <span class="text-emerald-600 font-bold">[배포] ➔ [새 배포]</span>를 클릭합니다.</li>
+          <li>톱니바퀴 ➔ <span class="font-bold text-emerald-600">웹 앱</span> 선택:
+            <ul class="list-disc list-inside ml-4 text-slate-600 font-normal mt-1 space-y-0.5">
+              <li>실행 주체: <b>나 (Me)</b></li>
+              <li>액세스 권한: <b>모든 사용자 (Anyone)</b></li>
+            </ul>
+          </li>
+          <li>배포 후 생성된 <span class="font-bold text-emerald-700">웹 앱 URL</span>을 본 프로그램의 설정창에 입력해주세요!</li>
+        </ol>
+
+        <div class="relative bg-slate-900 text-slate-200 p-3 rounded-xl text-[11px] font-mono overflow-x-auto">
+          <button id="copyGasCodeBtn" class="absolute top-2 right-2 bg-slate-700 hover:bg-slate-600 text-white px-2 py-1 rounded text-[10px]">
+            <i class="fa-regular fa-copy mr-1"></i>코드 복사
+          </button>
+          <pre id="gasCodeBlock"><code>function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var data = JSON.parse(e.postData.contents);
+    
+    // 헤더가 없으면 자동 생성
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow([
+        '작성일시', 
+        '학년/반', 
+        '번호', 
+        '이름', 
+        '관찰메모 및 인상깊은 장면', 
+        '학습 및 수업태도 영역', 
+        '정서 및 인성 영역', 
+        '최종 행동특성 및 종합의견'
+      ]);
+      sheet.getRange(1, 1, 1, 8).setFontWeight('bold').setBackground('#e2e8f0');
+    }
+    
+    sheet.appendRow([
+      data.date || new Date().toLocaleString('ko-KR'),
+      data.gradeClass || '',
+      data.studentNum || '',
+      data.studentName || '',
+      data.observationNote || '',
+      data.academicOutput || '',
+      data.emotionalOutput || '',
+      data.finalOutput || ''
+    ]);
+    
+    return ContentService.createTextOutput(JSON.stringify({ result: 'success' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ result: 'error', message: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}</code></pre>
+        </div>
+      </div>
+      
+      <div class="bg-slate-50 p-3 border-t border-slate-100 flex justify-end">
+        <button id="confirmGuideBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium text-xs">확인 완료</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-medium transition-all opacity-0 pointer-events-none transform translate-y-3 z-50 flex items-center">
+    <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 mr-2"></i>
+    <span id="toastMsg">메시지 내용</span>
+  </div>
+
+  <!-- App Script Logic -->
+  <script>
+    // State & Constants
+    let selectedAcademicTags = [];
+    let selectedEmotionalTags = [];
+
+    // DOM Elements
+    const studentNameEl = document.getElementById('studentName');
+    const gradeClassEl = document.getElementById('gradeClass');
+    const studentNumEl = document.getElementById('studentNum');
+    const observationNoteEl = document.getElementById('observationNote');
+    const academicOutputEl = document.getElementById('academicOutput');
+    const emotionalOutputEl = document.getElementById('emotionalOutput');
+    const finalOutputEl = document.getElementById('finalOutput');
+    const charCounterEl = document.getElementById('charCounter');
+
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    const gasUrlInput = document.getElementById('gasUrlInput');
+    const sheetUrlInput = document.getElementById('sheetUrlInput');
+
+    const loadingModal = document.getElementById('loadingModal');
+    const settingsModal = document.getElementById('settingsModal');
+    const gasGuideModal = document.getElementById('gasGuideModal');
+
+    // On Load Initializations
+    window.onload = () => {
+      // Load stored configurations
+      apiKeyInput.value = localStorage.getItem('gemini_api_key') || '';
+      gasUrlInput.value = localStorage.getItem('gas_web_app_url') || '';
+      sheetUrlInput.value = localStorage.getItem('google_sheet_url') || '';
+
+      setupTagToggles();
+      updateCharCounter();
+    };
+
+    // Tag Toggle Logic
+    function setupTagToggles() {
+      document.querySelectorAll('#academicTags .badge-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.classList.toggle('active');
+          const tag = btn.dataset.tag;
+          if (btn.classList.contains('active')) {
+            selectedAcademicTags.push(tag);
+          } else {
+            selectedAcademicTags = selectedAcademicTags.filter(t => t !== tag);
+          }
+        });
+      });
+
+      document.querySelectorAll('#emotionalTags .badge-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.classList.toggle('active');
+          const tag = btn.dataset.tag;
+          if (btn.classList.contains('active')) {
+            selectedEmotionalTags.push(tag);
+          } else {
+            selectedEmotionalTags = selectedEmotionalTags.filter(t => t !== tag);
+          }
+        });
+      });
+    }
+
+    // Character Counter
+    finalOutputEl.addEventListener('input', updateCharCounter);
+
+    function updateCharCounter() {
+      const text = finalOutputEl.value || '';
+      const charCount = text.length;
+      
+      // Calculate Byte length (Korean characters are approx 3 bytes in UTF-8, 2 bytes in NEIS System)
+      let byteCount = 0;
+      for (let i = 0; i < text.length; i++) {
+        const code = text.charCodeAt(i);
+        if (code > 127) {
+          byteCount += 3; // Standard UTF-8 count (or 2 for classic euckr NEIS)
+        } else {
+          byteCount += 1;
+        }
+      }
+      charCounterEl.textContent = `${charCount}자 / 약 ${byteCount} Byte`;
+    }
+
+    // Settings Modal Handlers
+    document.getElementById('openSettingsBtn').addEventListener('click', () => {
+      settingsModal.classList.remove('hidden');
+    });
+
+    document.getElementById('closeSettingsBtn').addEventListener('click', () => {
+      settingsModal.classList.add('hidden');
+    });
+
+    document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+      localStorage.setItem('gemini_api_key', apiKeyInput.value.trim());
+      localStorage.setItem('gas_web_app_url', gasUrlInput.value.trim());
+      localStorage.setItem('google_sheet_url', sheetUrlInput.value.trim());
+      settingsModal.classList.add('hidden');
+      showToast('설정이 성공적으로 저장되었습니다.', 'success');
+    });
+
+    // Guide Modal Handlers
+    document.getElementById('guideBtn').addEventListener('click', () => {
+      gasGuideModal.classList.remove('hidden');
+    });
+
+    document.getElementById('closeGuideBtn').addEventListener('click', () => {
+      gasGuideModal.classList.add('hidden');
+    });
+
+    document.getElementById('confirmGuideBtn').addEventListener('click', () => {
+      gasGuideModal.classList.add('hidden');
+    });
+
+    // Copy GAS Code
+    document.getElementById('copyGasCodeBtn').addEventListener('click', () => {
+      const codeText = document.getElementById('gasCodeBlock').innerText;
+      copyToClipboard(codeText);
+      showToast('Apps Script 코드가 복사되었습니다.');
+    });
+
+    // Sheet Direct Link Button
+    document.getElementById('openSheetBtn').addEventListener('click', () => {
+      const sheetUrl = localStorage.getItem('google_sheet_url') || sheetUrlInput.value.trim();
+      if (sheetUrl) {
+        window.open(sheetUrl, '_blank');
+      } else {
+        showToast('구글 시트 바로가기 URL을 [설정]에서 등록해주세요.', 'warning');
+        settingsModal.classList.remove('hidden');
+      }
+    });
+
+    // Clear Inputs
+    document.getElementById('clearInputBtn').addEventListener('click', () => {
+      studentNameEl.value = '';
+      gradeClassEl.value = '';
+      studentNumEl.value = '';
+      observationNoteEl.value = '';
+      selectedAcademicTags = [];
+      selectedEmotionalTags = [];
+      document.querySelectorAll('.badge-btn').forEach(b => b.classList.remove('active'));
+      showToast('입력란이 초기화되었습니다.');
+    });
+
+    // AI Generation via Gemini API
+    document.getElementById('generateBtn').addEventListener('click', async () => {
+      const name = studentNameEl.value.trim();
+      const rawMemo = observationNoteEl.value.trim();
+
+      if (!name) {
+        showToast('학생 이름을 입력해주세요.', 'warning');
+        studentNameEl.focus();
+        return;
+      }
+
+      if (!rawMemo && selectedAcademicTags.length === 0 && selectedEmotionalTags.length === 0) {
+        showToast('관찰 메모나 특성 태그를 하나 이상 선택/입력해주세요.', 'warning');
+        observationNoteEl.focus();
+        return;
+      }
+
+      loadingModal.classList.remove('hidden');
+
+      try {
+        const apiKey = localStorage.getItem('gemini_api_key') || '';
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+        const prompt = `
+당신은 대한민국 초등학교 베테랑 교사입니다. 학생의 특성 및 관찰 메모를 바탕으로 초등학교 나이스(NEIS) 학교생활기록부 [행동특성 및 종합의견] 문장을 작성해야 합니다.
+
+[학생 정보]
+- 이름: ${name}
+- 선택된 학습 특성: ${selectedAcademicTags.join(', ') || '없음'}
+- 선택된 정서/인성 특성: ${selectedEmotionalTags.join(', ') || '없음'}
+- 관찰 메모 및 인상 깊은 장면: "${rawMemo}"
+
+[작성 지침]
+1. 반드시 다음 JSON 형식으로 응답하세요. (마크다운 포맷이나 추가 설명 없이 순수 JSON만 반환)
+2. 'academic' 분야에는 학생의 학습 태도, 수업 참여도, 탐구 능력에 관한 전문적인 관찰 의견을 2~3문장 작성하세요.
+3. 'emotional' 분야에는 학생의 정서, 인성, 교우 관계, 규칙 준수, 인상 깊은 장면을 바탕으로 한 인성적 특성을 2~3문장 작성하세요.
+4. 'final' 분야에는 academic과 emotional의 내용을 자연스럽고 완성도 높게 종합하여 연결한 4~5문장의 나이스 입력용 최종 종합 문장을 작성하세요.
+5. 어조: '~함.', '~임.', '~ 모습을 보임.' 형태의 격식 있고 객관적이며 긍정적인 초등 교육 전문 용어를 사용할 것.
+
+[반환 JSON 양식]
+{
+  "academic": "학습 및 수업태도 요약 문장...",
+  "emotional": "정서, 인성, 교우관계 요약 문장...",
+  "final": "나이스 종합의견 전체 문장..."
+}
+`;
+
+        const payload = {
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            responseMimeType: "application/json"
+          }
+        };
+
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          throw new Error(`API 요청 실패 (코드: ${response.status})`);
+        }
+
+        const data = await response.json();
+        const jsonResultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (!jsonResultText) {
+          throw new Error("결과 응답을 불러올 수 없습니다.");
+        }
+
+        const parsedResult = JSON.parse(jsonResultText);
+
+        academicOutputEl.value = parsedResult.academic || '';
+        emotionalOutputEl.value = parsedResult.emotional || '';
+        finalOutputEl.value = parsedResult.final || '';
+
+        updateCharCounter();
+        showToast('행동특성 및 종합의견이 생성되었습니다!', 'success');
+
+      } catch (err) {
+        console.error(err);
+        showToast('생성 실패: API Key 및 네트워크 상태를 확인해주세요.', 'error');
+      } finally {
+        loadingModal.classList.add('hidden');
+      }
+    });
+
+    // Copy Final Text to Clipboard
+    document.getElementById('copyBtn').addEventListener('click', () => {
+      const text = finalOutputEl.value;
+      if (!text) {
+        showToast('복사할 내용이 없습니다.', 'warning');
+        return;
+      }
+      copyToClipboard(text);
+      showToast('최종 문장이 클립보드에 복사되었습니다.');
+    });
+
+    // Save to Google Sheet via GAS Web App
+    document.getElementById('saveToSheetBtn').addEventListener('click', async () => {
+      const gasUrl = localStorage.getItem('gas_web_app_url') || gasUrlInput.value.trim();
+
+      if (!gasUrl) {
+        showToast('구글 앱스 스크립트 웹앱 URL을 설정에 등록해주세요.', 'warning');
+        settingsModal.classList.remove('hidden');
+        return;
+      }
+
+      const name = studentNameEl.value.trim();
+      const finalText = finalOutputEl.value.trim();
+
+      if (!name || !finalText) {
+        showToast('학생 이름과 생성된 최종 문장이 필요합니다.', 'warning');
+        return;
+      }
+
+      const payload = {
+        date: new Date().toLocaleString('ko-KR'),
+        gradeClass: gradeClassEl.value.trim(),
+        studentNum: studentNumEl.value.trim(),
+        studentName: name,
+        observationNote: observationNoteEl.value.trim(),
+        academicOutput: academicOutputEl.value.trim(),
+        emotionalOutput: emotionalOutputEl.value.trim(),
+        finalOutput: finalText
+      };
+
+      showToast('구글 시트로 저장하는 중...', 'info');
+
+      try {
+        // Use text/plain header to avoid CORS preflight options issues on GAS
+        const res = await fetch(gasUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+
+        showToast('구글 시트에 데이터가 저장되었습니다!', 'success');
+      } catch (err) {
+        console.error(err);
+        showToast('구글 시트 저장 중 오류가 발생했습니다.', 'error');
+      }
+    });
+
+    // Helper Copy function
+    function copyToClipboard(str) {
+      const el = document.createElement('textarea');
+      el.value = str;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+    }
+
+    // Helper Toast function
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      const toastIcon = document.getElementById('toastIcon');
+
+      toastMsg.textContent = msg;
+
+      if (type === 'warning') {
+        toastIcon.className = 'fa-solid fa-triangle-exclamation text-amber-400 mr-2';
+      } else if (type === 'error') {
+        toastIcon.className = 'fa-solid fa-circle-xmark text-rose-400 mr-2';
+      } else {
+        toastIcon.className = 'fa-solid fa-circle-check text-emerald-400 mr-2';
+      }
+
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-3');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-3');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
